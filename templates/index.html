@@ -465,26 +465,49 @@
     };
     
     // First, clear existing overlays
+    console.log('Clearing overlays...');
     fetch('/api/overlay/reset', {method:'POST'})
       .then(r => r.json())
       .then(() => {
+        console.log('Overlays cleared');
         // Then, add costume and treat overlays if selected
         const overlaysToAdd = [];
-        if (costume) overlaysToAdd.push(costume.replace('.png', ''));
-        if (treat) overlaysToAdd.push(treat.replace('.png', ''));
+        if (costume) {
+          const costumeName = costume.replace('.png', '');
+          overlaysToAdd.push(costumeName);
+          console.log('Adding costume overlay:', costumeName);
+        }
+        if (treat) {
+          const treatName = treat.replace('.png', '');
+          overlaysToAdd.push(treatName);
+          console.log('Adding treat overlay:', treatName);
+        }
+        
+        console.log('Overlays to add:', overlaysToAdd);
         
         // Add overlays sequentially
         let overlayPromise = Promise.resolve();
         overlaysToAdd.forEach(overlayName => {
-          overlayPromise = overlayPromise.then(() => 
-            fetch('/api/overlay/' + encodeURIComponent(overlayName), {method:'POST'})
+          overlayPromise = overlayPromise.then(() => {
+            console.log('Adding overlay:', overlayName);
+            return fetch('/api/overlay/' + encodeURIComponent(overlayName), {method:'POST'})
               .then(r => r.json())
-          );
+              .then(data => {
+                console.log('Overlay added:', overlayName, data);
+                return data;
+              });
+          });
         });
         
         return overlayPromise;
       })
+      .catch(err => {
+        console.error('Error setting up overlays:', err);
+        // Continue with story generation even if overlays fail
+        return Promise.resolve();
+      })
       .then(() => {
+        console.log('Overlays setup complete, generating story...');
         // Now generate the story
         return fetch('/api/update_story', {
           method: 'POST',
