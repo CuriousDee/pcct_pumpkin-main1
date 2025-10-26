@@ -1,0 +1,44 @@
+{
+  "system_prompt": "You are a creative Halloween story generator for office settings. Generate spooky, atmospheric stories that are engaging and fun. 5 sentences max",
+  "main_prompt_template": "Generate a spooky Halloween story for an office setting. Use these details:\n- Name: {name}\n- Costume: {costume}\n- Treat: {treat}\n\nHere are some example story styles to inspire you:\n{examples}\n\nWrite a creative, spooky Halloween story (5 sentences) that incorporates the name, costume, and treat. Make it spookyy and engaging for an office Halloween party setting.use gender neutral pronouns",
+  "sample_templates": [
+    "In the eerie office, {name} appeared as a {costume}, their presence sending shivers down everyone's spine as they offered mysterious {treat}.",
+    "The office Halloween party took a supernatural turn when {name} arrived dressed as a {costume}, distributing enchanted {treat} that seemed to glow in the darkness.",
+    "Legends spoke of {name}, who would don the {costume} every Halloween, wandering the office corridors with a bag of {treat}, their footsteps echoing through the empty halls.",
+    "The annual office Halloween contest was won by {name}, whose {costume} was so convincing that colleagues swore they saw them levitate while handing out {treat}.",
+    "In the haunted server room, {name} materialized wearing a {costume}, their eyes gleaming as they offered {treat} to anyone brave enough to enter."
+  ],
+  "llm_parameters": {
+    "max_tokens": 200,
+    "temperature": 0.8,
+    "top_p": 0.9,
+    "stop": ["\n\n", "###", "---"]
+  },
+  "debug_mode": {
+    "enabled": true,
+    "log_level": "DEBUG",
+    "show_prompts": true,
+    "show_llm_parameters": true,
+    "show_story_generation": true,
+    "show_api_calls": true,
+    "show_errors": true
+  },
+  "fallback_templates": [
+    "{name} haunts the office in a {costume}, lurking near the {treat}. Employees scream!",
+    "Dressed as a {costume}, {name} casts a spooky shadow while reaching for a {treat}.",
+    "The office was never the same after {name} came as a {costume}, bringing a mysterious {treat}.",
+    "On Halloween, {name} transformed the break room into a spooky scene with their {costume} and a {treat}.",
+    "{name} in a {costume} couldn't stop laughing while tripping over a pile of {treat}s.",
+    "The real treat was {name}'s {costume}, especially when they danced for candy!",
+    "When the boss asked for a report, {name} in a {costume} just handed over a {treat} instead.",
+    "Everyone expected a scare, but {name} brought laughs in their {costume} and a bag of {treat}s.",
+    "It was a classic Halloween in the office with {name} as a {costume}, handing out {treat}s.",
+    "{name}'s desk was the place to be for Halloween, featuring a {costume} and a big bowl of {treat}s.",
+    "The sight of {name} in a {costume} brought Halloween spirit, especially with their {treat} stash.",
+    "Legends say {name} still roams the office in their {costume}, guarding the secret candy {treat}.",
+    "The adventure began when {name} in a {costume} found a mysterious {treat} map in the office.",
+    "{name} donned their {costume} and followed the {treat} trail to uncover office secrets.",
+    "With a {costume} and a brave heart, {name} ventured into the haunted server room for a {treat}.",
+    "It was a race against time as {name} in a {costume} sought the legendary {treat} of the office."
+  ]
+}

@@ -1,0 +1,1033 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>🎃 Spooky Pumpkin AI - Halloween Experience</title>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 87, 34, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 87, 34, 0.8); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    body { 
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a1a 100%);
+      background-attachment: fixed;
+      color: #e0e0e0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0;
+      position: relative;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page { 
+      display: flex; 
+      align-items: flex-start; 
+      justify-content: center; 
+      gap: 28px; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 24px; 
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+    }
+    .user-input-pane { flex: 0 0 300px; max-width: 300px; }
+    .user-input-form { 
+      background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+      padding: 20px; 
+      border-radius: 16px; 
+      border: 2px solid rgba(255, 87, 34, 0.3);
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      animation: float 6s ease-in-out infinite;
+    }
+    .user-input-form h3 { 
+      margin: 0 0 16px; 
+      color: #ff5722; 
+      font-size: 20px;
+      text-shadow: 0 0 10px rgba(255, 87, 34, 0.6);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .input-group { margin-bottom: 12px; }
+    .input-group label { 
+      display: block; 
+      margin-bottom: 6px; 
+      color: #d0a0f0; 
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-group input, .input-group select, .input-group textarea { 
+      width: 100%; 
+      padding: 10px; 
+      border-radius: 8px; 
+      border: 2px solid rgba(255, 87, 34, 0.3); 
+      background: #0a0a0a; 
+      color: #e0e0e0; 
+      font-size: 14px; 
+      box-sizing: border-box; 
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    .input-group input:focus, .input-group select:focus, .input-group textarea:focus { 
+      outline: none; 
+      border-color: #ff5722;
+      box-shadow: 0 0 15px rgba(255, 87, 34, 0.3);
+      background: #111;
+    }
+    .input-group textarea { resize: vertical; min-height: 60px; }
+    #updateStoryBtn { 
+      width: 100%; 
+      padding: 12px; 
+      background: linear-gradient(145deg, #ff5722, #e64a19);
+      color: white; 
+      border: none; 
+      border-radius: 10px; 
+      font-size: 16px; 
+      font-weight: bold;
+      cursor: pointer; 
+      margin-top: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+      transition: all 0.3s ease;
+    }
+    #updateStoryBtn:hover { 
+      background: linear-gradient(145deg, #ff7043, #ff5722);
+      box-shadow: 0 6px 20px rgba(255, 87, 34, 0.6);
+      transform: translateY(-2px);
+    }
+    #updateStoryBtn:active {
+      transform: translateY(0);
+    }
+    #updateStoryBtn:disabled { 
+      background: #444; 
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .story-pane { flex: 1; max-width: 45%; text-align: left; }
+    .story-heading { 
+      font-size: 42px; 
+      font-weight: 900; 
+      line-height: 1.3; 
+      margin: 0 0 28px;
+      background: linear-gradient(135deg, #ff5722, #d32f2f);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 87, 34, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: glow 3s ease-in-out infinite;
+    }
+    .story-box { 
+      border: 3px solid rgba(255, 87, 34, 0.4); 
+      border-radius: 20px; 
+      min-height: 220px; 
+      background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(15, 15, 15, 0.95));
+      color: #f5f5f5; 
+      font-size: 30px; 
+      padding: 28px; 
+      box-sizing: border-box; 
+      word-wrap: break-word; 
+      white-space: pre-wrap;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 0 30px rgba(255, 87, 34, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+    .story-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 87, 34, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    .story-box.story-box--empty { 
+      color: #666; 
+      font-style: italic;
+      font-size: 24px;
+    }
+    .video-pane { 
+      flex: 1; 
+      max-width: 55%; 
+      text-align: center;
+      position: relative;
+    }
+    img { 
+      max-width: 100%; 
+      height: auto; 
+      border: 3px solid rgba(255, 87, 34, 0.5);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+    }
+    img:hover {
+      box-shadow: 0 15px 50px rgba(255, 87, 34, 0.4);
+      transform: scale(1.01);
+    }
+    .controls { margin-top: 15px; }
+    button { 
+      margin: 0 6px; 
+      padding: 10px 16px; 
+      font-size: 14px;
+      background: linear-gradient(145deg, #424242, #212121);
+      color: #e0e0e0;
+      border: 2px solid rgba(255, 87, 34, 0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    button:hover {
+      background: linear-gradient(145deg, #ff5722, #e64a19);
+      border-color: #ff5722;
+      box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .controls-row { margin-bottom: 8px; }
+    h1 { 
+      margin-top: 0;
+      color: #ff5722;
+      text-shadow: 0 0 20px rgba(255, 87, 34, 0.6);
+      font-weight: 900;
+      font-size: 36px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+    @media (max-width: 1200px) {
+      .page { flex-direction: column; align-items: stretch; }
+      .user-input-pane, .story-pane, .video-pane { max-width: 100%; }
+      .user-input-pane { flex: none; }
+      .story-heading { font-size: 32px; }
+      .story-box { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="user-input-pane">
+      <div class="user-input-form">
+        <h3>🎭 Your Spooky Profile</h3>
+        <div class="input-group">
+          <label for="userName">Name:</label>
+          <input type="text" id="userName" name="userName" placeholder="Enter your name">
+        </div>
+        <div class="input-group">
+          <label for="costume">Costume:</label>
+          <select id="costume" name="costume">
+            <option value="fangs.png">Fangs</option>
+            <option value="horns.png">Horns</option>
+            <option value="YD1.png">Yellow Devil 1</option>
+            <option value="YD2.png">Yellow Devil 2</option>
+            <option value="YD3.png">Yellow Devil 3</option>
+            <option value="YD4.png">Yellow Devil 4</option>
+            <option value="YD5.png">Yellow Devil 5</option>
+            <option value="YP1.png">Yellow Pumpkin 1</option>
+            <option value="YP2.png">Yellow Pumpkin 2</option>
+            <option value="YP3.png">Yellow Pumpkin 3</option>
+            <option value="YP4.png">Yellow Pumpkin 4</option>
+            <option value="YP5.png">Yellow Pumpkin 5</option>
+            <option value="YW1.png">Yellow Witch 1</option>
+            <option value="YW2.png">Yellow Witch 2</option>
+            <option value="YW3.png">Yellow Witch 3</option>
+            <option value="YW4.png">Yellow Witch 4</option>
+            <option value="YW5.png">Yellow Witch 5</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="treat">Treat:</label>
+          <select id="treat" name="treat">
+            <option value="XCA1.png">Spooky Candy A</option>
+            <option value="XCH1.png">Chocolate Treat 1</option>
+            <option value="XCH2.png">Chocolate Treat 2</option>
+            <option value="XCH3.png">Chocolate Treat 3</option>
+            <option value="XC1.png">Candy 1</option>
+            <option value="XC2.png">Candy 2</option>
+            <option value="XC3.png">Candy 3</option>
+          </select>
+        </div>
+        <button id="updateStoryBtn" onclick="updateStory()">Update Story</button>
+      </div>
+      
+      <div class="prompt-config-form" id="promptConfigPanel" style="background:#222; padding:20px; border-radius:12px; border:1px solid #333; margin-top:20px; display:none;">
+        <h3>Prompt Configuration</h3>
+        <div class="input-group">
+          <label for="systemPrompt">System Prompt:</label>
+          <textarea id="systemPrompt" rows="3" placeholder="System prompt for the LLM"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="mainPromptTemplate">Main Prompt Template:</label>
+          <textarea id="mainPromptTemplate" rows="4" placeholder="Main prompt template with {name}, {costume}, {treat}, {examples} placeholders"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="sampleTemplates">Sample Templates (one per line):</label>
+          <textarea id="sampleTemplates" rows="5" placeholder="Sample templates with {name}, {costume}, {treat} placeholders"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="maxTokens">Max Tokens:</label>
+          <input type="number" id="maxTokens" min="50" max="500" value="200">
+        </div>
+        <div class="input-group">
+          <label for="temperature">Temperature:</label>
+          <input type="number" id="temperature" min="0" max="2" step="0.1" value="0.8">
+        </div>
+        <div class="input-group">
+          <label for="topP">Top P:</label>
+          <input type="number" id="topP" min="0" max="1" step="0.1" value="0.9">
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button onclick="loadPromptConfig()">Load Config</button>
+          <button onclick="savePromptConfig()">Save Config</button>
+          <button onclick="resetPromptConfig()">Reset to Defaults</button>
+        </div>
+      </div>
+      
+      <div class="debug-config-form" id="debugConfigPanel" style="background:#222; padding:20px; border-radius:12px; border:1px solid #333; margin-top:20px; display:none;">
+        <h3>Debug Mode</h3>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugEnabled" onchange="toggleDebugMode()">
+            Enable Debug Mode
+          </label>
+        </div>
+        <div class="input-group">
+          <label for="debugLogLevel">Log Level:</label>
+          <select id="debugLogLevel" onchange="updateDebugConfig()">
+            <option value="INFO">INFO</option>
+            <option value="DEBUG">DEBUG</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugShowPrompts" onchange="updateDebugConfig()">
+            Show Prompts
+          </label>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugShowLLMParams" onchange="updateDebugConfig()">
+            Show LLM Parameters
+          </label>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugShowStoryGen" onchange="updateDebugConfig()">
+            Show Story Generation
+          </label>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugShowAPICalls" onchange="updateDebugConfig()">
+            Show API Calls
+          </label>
+        </div>
+        <div class="input-group">
+          <label>
+            <input type="checkbox" id="debugShowErrors" onchange="updateDebugConfig()">
+            Show Errors
+          </label>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button onclick="loadDebugConfig()">Load Debug Config</button>
+          <button onclick="saveDebugConfig()">Save Debug Config</button>
+          <button onclick="toggleDebugModeAPI()">Toggle Debug Mode</button>
+        </div>
+      </div>
+    </div>
+    <div class="story-pane">
+      <div class="story-heading">Your Halloween Story</div>
+      <div id="storyBox" class="story-box story-box--empty">Waiting for story...</div>
+    </div>
+    <div class="video-pane">
+      <h1>🎃 Spooky Pumpkin AI 👻</h1>
+      <img id="stream" src="/stream" alt="video stream">
+
+      <div class="controls">
+        <div class="controls-row">
+          <button id="modeBtn" onclick="toggleMode()">Switch to Dev</button>
+          <span id="prodControls" style="display:inline-block">
+            <button id="snapshotBtn" onclick="triggerSnapshot()">Snapshot</button>
+            <button id="resetBtn" onclick="resetProd()">Reset</button>
+          </span>
+          <span id="devControls" style="display:none">
+            <span id="overlayButtons" style="display:inline-block"></span>
+            <button id="clearOverlaysBtn" onclick="clearOverlays()">Disable All Overlays</button>
+            <span id="activeOverlayList" style="margin-left:10px"></span>
+            <button id="nudgeBtn" onclick="toggleNudge()">Enable Nudge Mode</button>
+          </span>
+        </div>
+      </div>
+      <div id="nudgePanel" style="display:none; margin-top:14px;">
+    <div style="margin-bottom:6px;"><strong>Nudge Target:</strong> <span id="nudgeTargetLabel">none</span></div>
+    <div id="nudgeConfigValues" style="margin-bottom:6px; font-size:13px; color:#ccc;">config not loaded</div>
+    <div style="margin-bottom:8px;">
+      <label style="margin-right:10px;">Offset X (%):
+        <input type="number" id="offsetXInput" step="1" min="-200" max="200" oninput="onOffsetInput('x', this.value)">
+      </label>
+      <label>Offset Y (%):
+        <input type="number" id="offsetYInput" step="1" min="-200" max="200" oninput="onOffsetInput('y', this.value)">
+      </label>
+    </div>
+    <div>
+      <button onclick="applyNudge('offset_up')">Up</button>
+    </div>
+    <div style="margin-top:4px;">
+      <button onclick="applyNudge('offset_left')">Left</button>
+      <button onclick="applyNudge('offset_down')">Down</button>
+      <button onclick="applyNudge('offset_right')">Right</button>
+    </div>
+    <div style="margin-top:4px;">
+      <button onclick="applyNudge('scale_down')">Scale -</button>
+      <button onclick="applyNudge('scale_up')">Scale +</button>
+      <button onclick="applyNudge('anchor_left')">Anchor -</button>
+      <button onclick="applyNudge('anchor_right')">Anchor +</button>
+      <button onclick="applyNudge('y_offset_up')">Y Off -</button>
+      <button onclick="applyNudge('y_offset_down')">Y Off +</button>
+    </div>
+    <div style="margin-top:4px;">
+      <button onclick="applyNudge('save')">Save Config</button>
+      <button onclick="applyNudge('reload')">Reload</button>
+    </div>
+    <div id="nudgeNotice" style="margin-top:6px; font-size:12px; color:#aaa;"></div>
+  </div>
+    </div>
+  </div>
+
+  <script>
+  let currentMode = 'prod';
+  let prodFrozen = false;
+  let prodWaiting = false;
+  let overlayCatalog = [];
+  let activeOverlays = [];
+  let nudgeMode = false;
+  let nudgeTarget = null;
+  let nudgeConfig = null;
+  let nudgeMessage = '';
+  let nudgeCooldownUntil = 0;
+  const offsetSetTimers = { x: null, y: null };
+  let storyText = '';
+  let userName = '';
+  let userCostume = '';
+  let userTreat = '';
+
+  function updateStory(){
+    const name = document.getElementById('userName').value.trim();
+    const costume = document.getElementById('costume').value;
+    const treat = document.getElementById('treat').value;
+    
+    userName = name;
+    userCostume = costume;
+    userTreat = treat;
+    
+    // Show loading state
+    const storyBox = document.getElementById('storyBox');
+    const updateBtn = document.getElementById('updateStoryBtn');
+    storyBox.textContent = 'Generating spooky story...';
+    storyBox.classList.remove('story-box--empty');
+    updateBtn.disabled = true;
+    updateBtn.textContent = 'Generating...';
+    
+    // Generate story with user inputs
+    const storyData = {
+      name: name || 'Someone',
+      costume: costume,
+      treat: treat
+    };
+    
+    // First, clear existing overlays
+    fetch('/api/overlay/reset', {method:'POST'})
+      .then(r => r.json())
+      .then(() => {
+        // Then, add costume and treat overlays if selected
+        const overlaysToAdd = [];
+        if (costume) overlaysToAdd.push(costume.replace('.png', ''));
+        if (treat) overlaysToAdd.push(treat.replace('.png', ''));
+        
+        // Add overlays sequentially
+        let overlayPromise = Promise.resolve();
+        overlaysToAdd.forEach(overlayName => {
+          overlayPromise = overlayPromise.then(() => 
+            fetch('/api/overlay/' + encodeURIComponent(overlayName), {method:'POST'})
+              .then(r => r.json())
+          );
+        });
+        
+        return overlayPromise;
+      })
+      .then(() => {
+        // Now generate the story
+        return fetch('/api/update_story', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(storyData)
+        });
+      })
+      .then(r => r.json())
+      .then(data => {
+        if(data.success && data.story){
+          storyText = data.story;
+          updateStoryBox();
+        } else {
+          storyBox.textContent = 'Error generating story. Please try again.';
+          storyBox.classList.add('story-box--empty');
+        }
+      })
+      .catch(err => {
+        console.error('Error updating story:', err);
+        storyBox.textContent = 'Error generating story. Please try again.';
+        storyBox.classList.add('story-box--empty');
+      })
+      .finally(() => {
+        updateBtn.disabled = false;
+        updateBtn.textContent = 'Update Story';
+      });
+  }
+
+  function loadPromptConfig(){
+    fetch('/api/prompt_config')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success && data.config){
+          const config = data.config;
+          document.getElementById('systemPrompt').value = config.system_prompt || '';
+          document.getElementById('mainPromptTemplate').value = config.main_prompt_template || '';
+          document.getElementById('sampleTemplates').value = (config.sample_templates || []).join('\n');
+          document.getElementById('maxTokens').value = config.llm_parameters?.max_tokens || 200;
+          document.getElementById('temperature').value = config.llm_parameters?.temperature || 0.8;
+          document.getElementById('topP').value = config.llm_parameters?.top_p || 0.9;
+        }
+      })
+      .catch(err => console.error('Error loading prompt config:', err));
+  }
+
+  function savePromptConfig(){
+    const config = {
+      system_prompt: document.getElementById('systemPrompt').value,
+      main_prompt_template: document.getElementById('mainPromptTemplate').value,
+      sample_templates: document.getElementById('sampleTemplates').value.split('\n').filter(line => line.trim()),
+      llm_parameters: {
+        max_tokens: parseInt(document.getElementById('maxTokens').value),
+        temperature: parseFloat(document.getElementById('temperature').value),
+        top_p: parseFloat(document.getElementById('topP').value),
+        stop: ["\n\n", "###", "---"]
+      }
+    };
+    
+    fetch('/api/prompt_config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    })
+    .then(r => r.json())
+    .then(data => {
+      if(data.success){
+        alert('Prompt configuration saved successfully!');
+      } else {
+        alert('Error saving configuration: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(err => {
+      console.error('Error saving prompt config:', err);
+      alert('Error saving configuration');
+    });
+  }
+
+  function resetPromptConfig(){
+    if(confirm('Are you sure you want to reset the prompt configuration to defaults? This will overwrite your current settings.')){
+      fetch('/api/prompt_config/reset', {method: 'POST'})
+        .then(r => r.json())
+        .then(data => {
+          if(data.success){
+            alert('Prompt configuration reset to defaults!');
+            loadPromptConfig(); // Reload the form with new defaults
+          } else {
+            alert('Error resetting configuration: ' + (data.error || 'Unknown error'));
+          }
+        })
+        .catch(err => {
+          console.error('Error resetting prompt config:', err);
+          alert('Error resetting configuration');
+        });
+    }
+  }
+
+  function loadDebugConfig(){
+    fetch('/api/debug_mode')
+      .then(r => r.json())
+      .then(data => {
+        if(data.success && data.debug_config){
+          const config = data.debug_config;
+          document.getElementById('debugEnabled').checked = config.enabled || false;
+          document.getElementById('debugLogLevel').value = config.log_level || 'INFO';
+          document.getElementById('debugShowPrompts').checked = config.show_prompts || false;
+          document.getElementById('debugShowLLMParams').checked = config.show_llm_parameters || false;
+          document.getElementById('debugShowStoryGen').checked = config.show_story_generation || false;
+          document.getElementById('debugShowAPICalls').checked = config.show_api_calls || false;
+          document.getElementById('debugShowErrors').checked = config.show_errors || false;
+        }
+      })
+      .catch(err => console.error('Error loading debug config:', err));
+  }
+
+  function saveDebugConfig(){
+    const config = {
+      enabled: document.getElementById('debugEnabled').checked,
+      log_level: document.getElementById('debugLogLevel').value,
+      show_prompts: document.getElementById('debugShowPrompts').checked,
+      show_llm_parameters: document.getElementById('debugShowLLMParams').checked,
+      show_story_generation: document.getElementById('debugShowStoryGen').checked,
+      show_api_calls: document.getElementById('debugShowAPICalls').checked,
+      show_errors: document.getElementById('debugShowErrors').checked
+    };
+    
+    fetch('/api/debug_mode', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(config)
+    })
+    .then(r => r.json())
+    .then(data => {
+      if(data.success){
+        alert('Debug configuration saved successfully!');
+      } else {
+        alert('Error saving debug configuration: ' + (data.error || 'Unknown error'));
+      }
+    })
+    .catch(err => {
+      console.error('Error saving debug config:', err);
+      alert('Error saving debug configuration');
+    });
+  }
+
+  function toggleDebugMode(){
+    saveDebugConfig();
+  }
+
+  function updateDebugConfig(){
+    saveDebugConfig();
+  }
+
+  function toggleDebugModeAPI(){
+    fetch('/api/debug_mode/toggle', {method: 'POST'})
+      .then(r => r.json())
+      .then(data => {
+        if(data.success){
+          alert(data.message || 'Debug mode toggled!');
+          loadDebugConfig(); // Reload the form with new state
+        } else {
+          alert('Error toggling debug mode: ' + (data.error || 'Unknown error'));
+        }
+      })
+      .catch(err => {
+        console.error('Error toggling debug mode:', err);
+        alert('Error toggling debug mode');
+      });
+  }
+
+  function applyNudge(action, value){
+    if(!nudgeMode || !action){
+      return;
+    }
+    const now = Date.now();
+    const hasPayload = value !== undefined;
+    if(!hasPayload){
+      if(now < nudgeCooldownUntil){
+        return;
+      }
+      nudgeCooldownUntil = now + 200;
+    }
+    const opts = {method:'POST'};
+    if(hasPayload){
+      opts.headers = {'Content-Type':'application/json'};
+      opts.body = JSON.stringify({value});
+    }
+    fetch('/api/nudge/'+encodeURIComponent(action), opts)
+      .then(r=>r.json())
+      .then(res=>{
+        if(res.nudge !== undefined){
+          nudgeMode = !!res.nudge;
+        }
+        if(res.target !== undefined){
+          nudgeTarget = res.target;
+        }
+        if(Object.prototype.hasOwnProperty.call(res, 'config')){
+          nudgeConfig = res.config;
+        }
+        if(res.nudge_message || res.message){
+          nudgeMessage = res.nudge_message || res.message || '';
+        }
+        updateNudgePanel();
+        if(res.error){
+          console.error(res.error);
+        }
+      })
+      .catch(()=>{});
+  }
+
+  function updateNudgePanel(){
+    const panel = document.getElementById('nudgePanel');
+    const label = document.getElementById('nudgeTargetLabel');
+    const cfgBox = document.getElementById('nudgeConfigValues');
+    const notice = document.getElementById('nudgeNotice');
+    if(!panel || !label || !cfgBox || !notice){
+      return;
+    }
+    if(!nudgeMode || currentMode !== 'dev'){
+      panel.style.display = 'none';
+      updateOffsetInputs();
+      return;
+    }
+    panel.style.display = 'block';
+    label.textContent = nudgeTarget ? stripExt(nudgeTarget) : 'none';
+    renderNudgeConfigSummary();
+    notice.textContent = nudgeMessage || '';
+    updateOffsetInputs();
+  }
+  function toggleNudge(){
+    fetch('/api/toggle_nudge', {method:'POST'})
+      .then(r=>r.json())
+      .then(s=>{
+        if(typeof s.nudge === 'boolean'){
+          nudgeMode = s.nudge;
+        }
+        if(s.target !== undefined){
+          nudgeTarget = s.target;
+        }
+        if(Object.prototype.hasOwnProperty.call(s, 'config')){
+          nudgeConfig = s.config;
+        }
+        if(s.nudge_message || s.message){
+          nudgeMessage = s.nudge_message || s.message || '';
+        }
+        updateUi();
+      })
+      .catch(()=>{});
+  }
+
+
+  function stripExt(name){
+    return name ? name.replace(/\.png$/i, '') : name;
+  }
+
+  function rebuildOverlayButtons(list){
+    const container = document.getElementById('overlayButtons');
+    if(!container) return;
+    container.innerHTML = '';
+    list.forEach(name => {
+      const label = stripExt(name);
+      const btn = document.createElement('button');
+      btn.textContent = label;
+      btn.onclick = () => addOverlay(label);
+      container.appendChild(btn);
+    });
+  }
+
+  function addOverlay(name){
+    fetch('/api/overlay/'+encodeURIComponent(name), {method:'POST'})
+      .then(r=>r.json())
+      .then(s=>{
+        if(s.active_overlays){
+          activeOverlays = s.active_overlays;
+        }
+        updateUi();
+      })
+      .catch(()=>{});
+  }
+
+  function clearOverlays(){
+    fetch('/api/overlay/reset', {method:'POST'})
+      .then(r=>r.json())
+      .then(s=>{
+        if(s.active_overlays){
+          activeOverlays = s.active_overlays;
+        }
+        updateUi();
+      })
+      .catch(()=>{});
+  }
+
+  function updateActiveOverlayLabel(){
+    const el = document.getElementById('activeOverlayList');
+    if(!el) return;
+    if(currentMode === 'prod'){
+      el.textContent = '';
+      return;
+    }
+    if(activeOverlays.length){
+      el.textContent = 'Active: ' + activeOverlays.map(stripExt).join(', ');
+    } else {
+      el.textContent = 'Active: none';
+    }
+  }
+
+  function triggerSnapshot(){
+    fetch('/api/prod_snapshot', {method:'POST'})
+      .then(()=>{
+        prodFrozen = false;
+        prodWaiting = true;
+        updateUi();
+      });
+  }
+
+  function resetProd(){
+    fetch('/api/prod_reset', {method:'POST'})
+      .then(()=>{
+        prodFrozen = false;
+        prodWaiting = false;
+        updateUi();
+      });
+  }
+
+  function updateUi(){
+    const modeBtn = document.getElementById('modeBtn');
+    const devControls = document.getElementById('devControls');
+    const prodControls = document.getElementById('prodControls');
+    const snapshotBtn = document.getElementById('snapshotBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const fpsBox = document.getElementById('fpsBox');
+    const clearBtn = document.getElementById('clearOverlaysBtn');
+    const nudgeBtn = document.getElementById('nudgeBtn');
+    const promptConfigPanel = document.getElementById('promptConfigPanel');
+    const debugConfigPanel = document.getElementById('debugConfigPanel');
+
+    if(currentMode === 'prod'){
+      modeBtn.textContent = 'Switch to Dev';
+      devControls.style.display = 'none';
+      prodControls.style.display = 'inline-block';
+      snapshotBtn.disabled = prodFrozen || prodWaiting;
+      resetBtn.disabled = !prodFrozen && !prodWaiting;
+      if(fpsBox){
+        fpsBox.style.display = 'none';
+      }
+      // Hide dev-only panels in prod mode
+      if(promptConfigPanel){
+        promptConfigPanel.style.display = 'none';
+      }
+      if(debugConfigPanel){
+        debugConfigPanel.style.display = 'none';
+      }
+    } else {
+      modeBtn.textContent = 'Switch to Prod';
+      devControls.style.display = 'inline-block';
+      prodControls.style.display = 'none';
+      if(fpsBox){
+        fpsBox.style.display = 'block';
+      }
+      // Show dev-only panels in dev mode
+      if(promptConfigPanel){
+        promptConfigPanel.style.display = 'block';
+      }
+      if(debugConfigPanel){
+        debugConfigPanel.style.display = 'block';
+      }
+    }
+    if(clearBtn){
+      clearBtn.disabled = activeOverlays.length === 0;
+    }
+    if(nudgeBtn){
+      if(currentMode === 'prod'){
+        nudgeBtn.disabled = true;
+        nudgeBtn.textContent = 'Enable Nudge Mode';
+      } else {
+        nudgeBtn.disabled = false;
+        nudgeBtn.textContent = nudgeMode ? 'Disable Nudge Mode' : 'Enable Nudge Mode';
+      }
+    }
+    updateActiveOverlayLabel();
+    updateNudgePanel();
+  }
+
+  function formatOffset(value){
+    const num = Number(value);
+    if(!Number.isFinite(num)){
+      return '0';
+    }
+    return num.toFixed(3).replace(/\.0+$/,'').replace(/\.([0-9]*[1-9])0+$/,'.$1');
+  }
+
+  function renderNudgeConfigSummary(){
+    const cfgBox = document.getElementById('nudgeConfigValues');
+    if(!cfgBox){
+      return;
+    }
+    if(nudgeConfig){
+      cfgBox.textContent = `scale ${nudgeConfig.scale.toFixed(3)} | y ${nudgeConfig.y_offset.toFixed(3)} | anchor ${nudgeConfig.x_anchor.toFixed(3)} | offx ${formatOffset(nudgeConfig.offset_x)}% | offy ${formatOffset(nudgeConfig.offset_y)}%`;
+    } else {
+      cfgBox.textContent = 'config not loaded';
+    }
+  }
+
+  function updateOffsetInputs(){
+    const inputX = document.getElementById('offsetXInput');
+    const inputY = document.getElementById('offsetYInput');
+    if(!inputX || !inputY){
+      return;
+    }
+    if(!nudgeMode || currentMode !== 'dev'){
+      inputX.disabled = true;
+      inputY.disabled = true;
+      return;
+    }
+    if(!nudgeConfig){
+      inputX.value = '';
+      inputY.value = '';
+      inputX.disabled = true;
+      inputY.disabled = true;
+      return;
+    }
+    inputX.disabled = false;
+    inputY.disabled = false;
+    const active = document.activeElement;
+    if(active !== inputX){
+      inputX.value = formatOffset(nudgeConfig.offset_x ?? 0);
+    }
+    if(active !== inputY){
+      inputY.value = formatOffset(nudgeConfig.offset_y ?? 0);
+    }
+  }
+
+  function onOffsetInput(axis, raw){
+    if(currentMode !== 'dev' || !nudgeMode || !nudgeConfig){
+      return;
+    }
+    if(offsetSetTimers[axis]){
+      clearTimeout(offsetSetTimers[axis]);
+    }
+    const parsed = parseFloat(raw);
+    if(Number.isNaN(parsed)){
+      return;
+    }
+    const value = Math.round(parsed * 1000) / 1000;
+    if(axis === 'x'){
+      nudgeConfig.offset_x = value;
+    } else {
+      nudgeConfig.offset_y = value;
+    }
+    renderNudgeConfigSummary();
+    updateOffsetInputs();
+    offsetSetTimers[axis] = setTimeout(()=>{
+      applyNudge(axis === 'x' ? 'set_offset_x' : 'set_offset_y', value);
+      offsetSetTimers[axis] = null;
+    }, 200);
+  }
+
+  function updateStoryBox(){
+    const box = document.getElementById('storyBox');
+    if(!box){
+      return;
+    }
+    const text = (storyText || '').trim();
+    if(text){
+      box.textContent = text;
+      box.classList.remove('story-box--empty');
+    } else {
+      box.textContent = 'Waiting for story...';
+      box.classList.add('story-box--empty');
+    }
+  }
+
+  function fetchStory(){
+    fetch('/api/story')
+      .then(r=>r.json())
+      .then(data=>{
+        if(data && typeof data.text === 'string'){
+          if(data.text !== storyText){
+            storyText = data.text;
+            updateStoryBox();
+          }
+        }
+      })
+      .catch(()=>{});
+  }
+
+  // Poll status every second
+  setInterval(()=>{
+    fetch('/api/status')
+      .then(r=>r.json())
+      .then(s=>{
+        document.getElementById('fps').textContent = s.fps + ' FPS';
+        const catalog = Array.isArray(s.overlays) ? s.overlays : [];
+        if(JSON.stringify(catalog) !== JSON.stringify(overlayCatalog)){
+          overlayCatalog = catalog;
+          rebuildOverlayButtons(overlayCatalog);
+        }
+        activeOverlays = Array.isArray(s.active_overlays) ? s.active_overlays : [];
+        nudgeMode = !!s.nudge;
+        if(Object.prototype.hasOwnProperty.call(s, 'nudge_target')){
+          nudgeTarget = s.nudge_target;
+        }
+        if(Object.prototype.hasOwnProperty.call(s, 'nudge_config')){
+          nudgeConfig = s.nudge_config;
+        }
+        nudgeMessage = s.nudge_message || '';
+        if(Object.prototype.hasOwnProperty.call(s, 'story_text')){
+          if(s.story_text !== storyText){
+            storyText = s.story_text || '';
+            updateStoryBox();
+          }
+        }
+        currentMode = s.mode;
+        prodFrozen = !!s.prod_frozen;
+        prodWaiting = !!s.prod_waiting;
+        updateUi();
+      })
+      .catch(()=>{});
+  }, 1000);
+
+  setInterval(fetchStory, 3000);
+  fetchStory();
+  updateStoryBox();
+
+  function toggleMode(){
+    const next = currentMode === 'prod' ? 'dev' : 'prod';
+    fetch('/api/set_mode?mode='+next, {method:'POST'}).then(()=>{
+      currentMode = next;
+      if(next === 'dev'){
+        prodFrozen = false;
+        prodWaiting = false;
+      }
+      updateUi();
+    });
+  }
+
+  // initialize UI to match defaults
+  updateUi();
+  updateNudgePanel();
+  
+  // Load prompt configuration on page load
+  loadPromptConfig();
+  loadDebugConfig();
+  </script>
+  <div id="fpsBox" style="position:fixed; right:10px; top:10px; color:#0f0; font-weight:bold">FPS: <span id="fps">-</span></div>
+</body>
+</html>
