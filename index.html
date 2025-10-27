@@ -503,7 +503,6 @@
       })
       .catch(err => {
         console.error('Error setting up overlays:', err);
-        // Continue with story generation even if overlays fail
         return Promise.resolve();
       })
       .then(() => {
