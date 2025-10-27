@@ -143,17 +143,38 @@ The application will be available at: **http://localhost:5000**
 
 ## Optional: AI Story Generation Setup
 
-The app works great with template-based stories, but you can enable AI-generated stories using Ollama.
+The app works great with template-based stories, but you can enable AI-generated stories using Ollama or llama.cpp.
 
-### Quick Setup for Windows
+### 🚀 TinyLlama Setup (Recommended for Speed)
+
+TinyLlama is a compact 700 MB model that generates stories 2-3x faster than larger models!
+
+**📖 Complete setup guide: [TINYLLAMA_SETUP.md](TINYLLAMA_SETUP.md)**
+
+Quick start:
+```powershell
+# Using Ollama (easiest)
+ollama pull tinyllama
+
+# Or download GGUF file directly
+# Visit: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF
+```
+
+**Benefits of TinyLlama:**
+- ⚡ **2-3x faster** story generation
+- 💾 **700 MB** (vs 2.6 GB for Llama-2-7B)
+- 🧠 **1.5 GB RAM** usage (vs 4+ GB)
+- ✨ **Perfect for 100-word stories**
+
+### Setup for Windows
 
 See detailed instructions in [OLLAMA_SETUP.md](OLLAMA_SETUP.md)
 
 1. Install Ollama from [ollama.ai](https://ollama.ai/download)
 2. Start Ollama server: `ollama serve`
-3. Download a model: `ollama pull llama2`
+3. Download a model: `ollama pull llama2` or `ollama pull tinyllama`
 
-### Quick Setup for Ubuntu
+### Setup for Ubuntu
 
 ```bash
 # Install Ollama
@@ -360,6 +381,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 For issues and questions:
 - Check the troubleshooting section above
 - See [OLLAMA_SETUP.md](OLLAMA_SETUP.md) for AI setup help
+- See [TINYLLAMA_SETUP.md](TINYLLAMA_SETUP.md) for fast model setup
 - Review the code comments in `web_server.py`
 
 ---

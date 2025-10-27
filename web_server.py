@@ -185,6 +185,9 @@ def initialize_llm():
     if LLAMA_CPP_AVAILABLE:
         try:
             model_paths = [
+                # Try smallest models first for fastest inference
+                os.path.join(os.path.dirname(__file__), "models", "TinyLlama-1.1B-Chat-v1.0.Q2_K.gguf"),
+                os.path.join(os.path.dirname(__file__), "models", "phi-2.Q2_K.gguf"),
                 os.path.join(os.path.dirname(__file__), "models", "llama-2-7b-chat.Q2_K.gguf"),
                 os.path.join(os.path.dirname(__file__), "models", "mistral-7b-instruct-v0.2.Q4_K_M.gguf")
             ]
@@ -263,7 +266,7 @@ def generate_story_with_llm(name, costume_display, treat_display):
             response = requests.post(
                 "http://localhost:11434/api/generate",
                 json={
-                    "model": "llama2",  # or "llama2" or "llama2:7b" or "mistral" - customize as needed
+                    "model": "tinyllama",  # Using TinyLlama for fastest story generation
                     "prompt": prompt,
                     "stream": False,
                     "options": {

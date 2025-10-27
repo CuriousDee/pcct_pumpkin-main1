@@ -9,14 +9,19 @@
     "In the haunted server room, {name} materialized wearing a {costume}, their eyes gleaming as they offered {treat} to anyone brave enough to enter."
   ],
   "llm_parameters": {
-    "max_tokens": 200,
+    "max_tokens": 300,
     "temperature": 0.8,
     "top_p": 0.9,
-    "stop": ["\n\n", "###", "---"]
+    "presence_penalty": 1.8,
+    "stop": [
+      "\n\n",
+      "###",
+      "---"
+    ]
   },
   "debug_mode": {
     "enabled": true,
-    "log_level": "DEBUG",
+    "log_level": "INFO",
     "show_prompts": true,
     "show_llm_parameters": true,
     "show_story_generation": true,
